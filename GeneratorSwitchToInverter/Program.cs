@@ -51,7 +51,7 @@ namespace GeneratorSwitchToInverter
                     }
                 }
 
-                if (args.Length == 0) WriteHelper();
+                //if (args.Length == 0) WriteHelper();
 
                 SwitchModel _OldSwitchModel = FileManager.GetSwitchFromFile(DefaultFileName);
 

@@ -35,18 +35,8 @@ namespace GeneratorSwitchToInverter
         {
             try
             {
-                string FinalFileName = "FinalSwitch.txt";
-
-                if(File.Exists(FinalFileName))
-                {
-                    int index = 1;
-
-                    while (File.Exists("FinalSwitch(" + index + ").txt")) index++;
-
-                    FinalFileName = "FinalSwitch(" + index + ").txt";
-                }
-
-                File.WriteAllText(FinalFileName, _inputSwitch.MakeString(), Encoding.UTF8);
+                string FinalFileName = "FinalSwitch";
+                SaveFile(FinalFileName, _inputSwitch.MakeString());
             }
             catch (Exception ex)
             {
@@ -58,18 +48,37 @@ namespace GeneratorSwitchToInverter
         {
             try
             {
-                string DefaultFileName = "DefaultSwitch.txt";
+                string DefaultFileName = "DefaultSwitch";
+                SaveFile(DefaultFileName, MakeDefaultString());
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.GoException(ex);
+            }
+        }
 
-                if(File.Exists(DefaultFileName))
+        protected static void SaveFile(string nameFile, string bodyFile, bool createNewFile = true, string extension = "txt")
+        {
+            try
+            {
+                if (createNewFile)
                 {
-                    int index = 1;
+                    if (File.Exists(nameFile + "." + extension))
+                    {
+                        int index = 1;
 
-                    while (File.Exists("DefaultSwitch(" + index + ").txt")) index++;
+                        while (File.Exists(bodyFile + "(" + index + ")." + extension)) index++;
 
-                    DefaultFileName = "DefaultSwitch(" + index + ").txt";
+                        nameFile = bodyFile + "(" + index + ")";
+                    }
+
+                    File.WriteAllText(nameFile + "." + extension, bodyFile, Encoding.UTF8);
                 }
-
-                File.WriteAllText(DefaultFileName, MakeDefaultString(), Encoding.UTF8);
+                else
+                {
+                    using StreamWriter file = new(nameFile + "." + extension, append: true);
+                    file.WriteLine(bodyFile);
+                }
             }
             catch (Exception ex)
             {
